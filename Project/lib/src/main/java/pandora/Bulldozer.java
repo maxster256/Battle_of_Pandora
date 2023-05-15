@@ -10,4 +10,8 @@ public class Bulldozer extends Unit{
 	{
 		
 	}
+	public Bulldozer(int health, int speed, int pos_x, int pos_y)
+	{
+		super(health,speed,pos_x,pos_y);
+	}
 }
