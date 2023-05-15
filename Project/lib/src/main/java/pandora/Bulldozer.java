@@ -43,7 +43,7 @@ public class Bulldozer extends Unit{
 	}
 	public void destroy()
 	{
-		Map[pos_x][pos_y] = '_'; // Zamień zawartość pola na '_'
+		map[pos_x][pos_y] = '_'; // Zamień zawartość pola na '_'
 	}
 	public Bulldozer(int health, int speed, int pos_x, int pos_y)
 	{
