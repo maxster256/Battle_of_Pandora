@@ -3,17 +3,19 @@ package pandora;
 import java.util.Scanner;
 
 public class Main {
+	
+	static int x,y;
+	static int rider, archer, robot, soldier;
+	static int density;
+	static int iterations;
 
-	public static void main(String[] args)	//metoda na parametry wejsciowe
-	{
-		int x,y;
-		int rider, archer, robot, soldier;
-		int density;
-		int iterations;
+	public static void main(String[] args) throws InterruptedException
+	{ 
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Podaj rozmiar mapy:");
 		x = scan.nextInt();
 		y = scan.nextInt();
+		
 		System.out.println("Podaj liczebnosc jezdzcow:");
 		rider=scan.nextInt();
 		System.out.println("Podaj liczebnosc lucznikow:");
@@ -26,18 +28,18 @@ public class Main {
 		density=scan.nextInt();
 		System.out.println("Podaj liczbe iteracji:");
 		iterations=scan.nextInt();
-		//...
 		Main.simulation(x,y,rider,archer,robot,soldier,iterations,density);
 		scan.close();
 	}
 	
-	public static void simulation(int x, int y, int rider, int archer, int robot, int soldier, int iterations, int density) //metoda na wypadek skryptow z podanymi parametrami
+	public static void simulation(int x, int y, int rider, int archer, int robot, int soldier, int iterations, int density) throws InterruptedException
 	{
 		Map mapa = new Map(x,y,density);
-		mapa.generate();		//stworzenie mapy
+		mapa.generate();
+		mapa.display();
 		for(int i=0;i<iterations;i++)
 		{
-			//wykonanie symulacji	
+			
 		}
 	}
 
