@@ -16,7 +16,7 @@ public class Bulldozer extends Unit{
 			if(moves<1){	// gdy liczba ruchow wyniesie wiecej niz 0 ale mniej niz 1 instrukcja wykona ponizszy krok.
 				if(random.nextFloat(1)<moves) {break;} //jesli predkosc jest wyrazona jako liczba niecalkowita to instrukcja if wylosuje czy ma wykonac dodatkowy ruch gdy liczba ruchow spadnie ponizej 1
 			}
-		direction = random.nextInt(4); // Generuj losową liczbę między 0-3
+		direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
 		
 		// Poruszaj się w górę
 		if (direction == 0) {
@@ -30,7 +30,7 @@ public class Bulldozer extends Unit{
            	}}}
 		// Poruszaj się w dół
 		else if (direction == 1) { 
-       			if (pos_y + 1 < Main.y) {
+       			if (pos_y + 1 < Main.getY()) {
             			if (mapa.isFieldEmpty(pos_x, pos_y + 1)) {
               				pos_y++;
             	} 
@@ -50,7 +50,7 @@ public class Bulldozer extends Unit{
         	}}}
 		// Poruszaj się w prawo
 		else if (direction == 3) {
-       			if (pos_x + 1 < Main.x) {
+       			if (pos_x + 1 < Main.getX()) {
            			if (mapa.isFieldEmpty(pos_x + 1, pos_y)) {
               				pos_x++;
            	} 
