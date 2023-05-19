@@ -50,7 +50,7 @@ public class Bulldozer extends Unit{
 	}
 	public void destroy()
 	{
-		mapa.change_map(pos_x,pos_y);
+		mapa.change_map(pos_x,pos_y);	//wywolanie metody z klasy map zmieniajacej wartosc pola na ktorym stoi buldozer
 	}
 	public Bulldozer(int health, int speed, int pos_x, int pos_y)
 	{
