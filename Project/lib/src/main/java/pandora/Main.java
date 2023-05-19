@@ -9,7 +9,7 @@ public class Main {
 	static int density;
 	static int iterations;
 
-	public static void main(String[] args) throws InterruptedException
+	public static void main(String[] args)
 	{ 
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Podaj rozmiar mapy:");
@@ -32,14 +32,14 @@ public class Main {
 		scan.close();
 	}
 	
-	public static void simulation(int x, int y, int rider, int archer, int robot, int soldier, int iterations, int density) throws InterruptedException
+	public static void simulation(int x, int y, int rider, int archer, int robot, int soldier, int iterations, int density) //metoda z uwzglednieniem parametrow wejsciowych np ze skryptow
 	{
 		Map mapa = new Map(x,y,density);
-		mapa.generate();
+		mapa.generate();		//utworzenie mapy
 		mapa.display();
 		for(int i=0;i<iterations;i++)
 		{
-			
+			//wykonanie symulacji
 		}
 	}
 
