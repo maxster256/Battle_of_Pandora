@@ -9,7 +9,14 @@ public class Bulldozer extends Unit{
 	public void move()
 	{
 		Random random = new Random();
-		int direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
+		int direction;
+		moves = speed;
+		while(moves>0)	//petla wykonuje przewidziana liczbe ruchow dla jednostki np: dla speed=2 petla wykona się 2 razy
+		{
+			if(moves<1){	// gdy liczba ruchow wyniesie wiecej niz 0 ale mniej niz 1 instrukcja wykona ponizszy krok.
+				if(random.nextFloat(1)<moves) {break;} //jesli predkosc jest wyrazona jako liczba niecalkowita to instrukcja if wylosuje czy ma wykonac dodatkowy ruch gdy liczba ruchow spadnie ponizej 1
+			}
+		direction = random.nextInt(4); // Generuj losową liczbę między 0-3
 		
 		// Poruszaj się w górę
 		if (direction == 0) {
@@ -50,7 +57,9 @@ public class Bulldozer extends Unit{
 				else {
 					destroy();
 					pos_x++;
-            	}}}	
+            }}}	
+		moves--;
+		}
 	}
 	public void destroy()
 	{
