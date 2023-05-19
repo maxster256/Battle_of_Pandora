@@ -4,10 +4,10 @@ import java.util.Scanner;
 
 public class Main {
 	
-	static int x,y;
-	static int rider, archer, robot, soldier;
-	static int density;
-	static int iterations;
+	private static int x,y;
+	private static int rider, archer, robot, soldier;
+	private static int density;
+	private static int iterations;
 
 	public static void main(String[] args)
 	{ 
@@ -42,5 +42,7 @@ public class Main {
 			//wykonanie symulacji
 		}
 	}
+	public static int getX() {return x;}
+	public static int getY() {return y;}
 
 }
