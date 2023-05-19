@@ -26,7 +26,7 @@ public class Archer extends Unit_Strength implements Interface{
            	}}
 		// Poruszaj się w dół
 		else if (direction == 1) { 
-       			if (pos_y + 1 < Main.y) {
+       			if (pos_y + 1 < Main.getY()) {
             			if (mapa.isFieldaTree(pos_x, pos_y + 1)==false) {pos_y++;}
             	}}
 		// Poruszaj się w lewo
@@ -36,7 +36,7 @@ public class Archer extends Unit_Strength implements Interface{
         	}}
 		// Poruszaj się w prawo
 		else if (direction == 3) {
-       			if (pos_x + 1 < Main.x) {
+       			if (pos_x + 1 < Main.getX()) {
            			if (mapa.isFieldaTree(pos_x + 1, pos_y)==false) {pos_x++;}
             }}
 		moves--;
