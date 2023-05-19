@@ -47,13 +47,18 @@ public class Map {
     }
 
     // metoda wyświetlająca mapę na ekranie
-    public void display() {
+    public void display() { 	
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 System.out.print(map[row][col] + " ");
             }
             System.out.println();
         }
+    }
+    
+    public boolean isFieldEmpty(int x, int y)
+    {
+    	return true;
     }
 
     // metoda zwracająca liczbę T-drzew na mapie
@@ -64,5 +69,9 @@ public class Map {
     // metoda zwracająca liczbę B-krzaków na mapie
     public int getBushes_numb() {
         return Bushes_numb;
+    }
+    public void change_map(int x, int y)
+    {
+    	map[x][y] = '_'; // Zamień zawartość pola na '_'
     }
 }
