@@ -3,7 +3,7 @@ package pandora;
 import java.util.Scanner;
 
 public class Main {
-	
+	//parametry prywatne pozyskiwane getterami na samym dole klasy Main
 	private static int x,y;
 	private static int rider, archer, robot, soldier;
 	private static int density;
@@ -42,7 +42,7 @@ public class Main {
 			//wykonanie symulacji
 		}
 	}
-	public static int getX() {return x;}
-	public static int getY() {return y;}
+	public static int getX() {return x;}	//getter dlugosci mapy
+	public static int getY() {return y;}	//getter szerokosci mapy
 
 }
