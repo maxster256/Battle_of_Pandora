@@ -19,26 +19,25 @@ public class Rider extends Unit_Strength implements Interface{
 			}
 		direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
 		
-		// Poruszaj się w górę
-		if (direction == 0) {
-        		if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
-           			if (mapa.isFieldaTree(pos_x, pos_y - 1)==false) {pos_y--;} // Sprawdz czy pole jest drzewem. Jesli nie, przejdź na nową pozycję
-           	}}
-		// Poruszaj się w dół
-		else if (direction == 1) { 
-       			if (pos_y + 1 < Main.getY()) {
-            			if (mapa.isFieldaTree(pos_x, pos_y + 1)==false) {pos_y++;}
-            	}}
-		// Poruszaj się w lewo
-		else if (direction == 2) {
-       			if (pos_x - 1 >= 0) {
-          			if (mapa.isFieldaTree(pos_x - 1, pos_y)==false) {pos_x--;}
-        	}}
-		// Poruszaj się w prawo
-		else if (direction == 3) {
-       			if (pos_x + 1 < Main.getX()) {
-           			if (mapa.isFieldaTree(pos_x + 1, pos_y)==false) {pos_x++;}
-            }}
+			switch(direction)
+			{
+			case 0: //Poruszaj się w górę
+				if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
+				if (mapa.isFieldaTree(pos_x, pos_y - 1)==false) {pos_y--;} // Sprawdz czy pole jest drzewem. Jesli nie, przejdź na nową pozycję
+				}break;
+			case 1: // Poruszaj się w dół
+				if (pos_y + 1 < Main.getY()) {
+				if (mapa.isFieldaTree(pos_x, pos_y + 1)==false) {pos_y++;}
+				}break;
+			case 2: // Poruszaj się w lewo
+				if (pos_x - 1 >= 0) {
+				if (mapa.isFieldaTree(pos_x - 1, pos_y)==false) {pos_x--;}
+				}break;
+			case 3: // Poruszaj się w prawo
+				if (pos_x + 1 < Main.getX()) {
+				if (mapa.isFieldaTree(pos_x + 1, pos_y)==false) {pos_x++;}
+				}break;
+			}
 		moves--;
 		}
 	}
@@ -47,7 +46,7 @@ public class Rider extends Unit_Strength implements Interface{
 	{
 		
 	}
-	public Rider(int health, int speed, int pos_x, int pos_y,int strength, int index)
+	public Rider(int health, double speed, int pos_x, int pos_y,int strength, int index)
 	{
 		super(health,speed,pos_x,pos_y,strength,index);
 	}
