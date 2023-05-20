@@ -18,30 +18,29 @@ public class Bulldozer extends Unit{
 			}
 		direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
 		
-		// Poruszaj się w górę
-		if (direction == 0) {
-        		if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
-        			pos_y--; // Przejdź na nową pozycję
-           			if (mapa.isFieldEmpty(pos_x, pos_y - 1)==false) {destroy();} // Sprawdź, czy pole jest puste i zniszcz pole, jeśli nie jest puste
-           	}}
-		// Poruszaj się w dół
-		else if (direction == 1) { 
-       			if (pos_y + 1 < Main.getY()) {
-       				pos_y++;
-            			if (mapa.isFieldEmpty(pos_x, pos_y + 1)==false) {destroy();}
-            	}}
-		// Poruszaj się w lewo
-		else if (direction == 2) {
-       			if (pos_x - 1 >= 0) {
-       				pos_x--;
-          			if (mapa.isFieldEmpty(pos_x - 1, pos_y)==false) {destroy();}
-        	}}
-		// Poruszaj się w prawo
-		else if (direction == 3) {
-       			if (pos_x + 1 < Main.getX()) {
-       				pos_x++;
-           			if (mapa.isFieldEmpty(pos_x + 1, pos_y)==false) {destroy();}
-            }}
+			switch(direction)
+			{
+			case 0: // Poruszaj się w gore
+				if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
+				pos_y--; // Przejdź na nową pozycję
+				if (mapa.isFieldEmpty(pos_x, pos_y - 1)==false) {destroy();} // Sprawdź, czy pole jest puste i zniszcz pole, jeśli nie jest puste
+				}break;
+			case 1: // Poruszaj się w dol
+				if (pos_y + 1 < Main.getY()) {
+					pos_y++;
+					if (mapa.isFieldEmpty(pos_x, pos_y + 1)==false) {destroy();}
+				}break;
+			case 2: // Poruszaj się w lewo
+				if (pos_x - 1 >= 0) {
+					pos_x--;
+				if (mapa.isFieldEmpty(pos_x - 1, pos_y)==false) {destroy();}
+				}break;
+			case 3: // Poruszaj się w prawo
+				if (pos_x + 1 < Main.getX()) {
+					pos_x++;
+				if (mapa.isFieldEmpty(pos_x + 1, pos_y)==false) {destroy();}
+				}break;
+			}
 		moves--;
 		}
 	}
