@@ -2,10 +2,11 @@ package pandora;
 
 public abstract class Unit {
 	int health;
-	int speed;
+	double speed;
 	int pos_x;
 	int pos_y;
-	public Unit(int health, int speed, int pos_x, int pos_y)
+	double moves;
+	public Unit(int health, double speed, int pos_x, int pos_y)
 	{
 		this.health=health;
 		this.speed=speed;

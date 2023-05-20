@@ -9,48 +9,40 @@ public class Bulldozer extends Unit{
 	public void move()
 	{
 		Random random = new Random();
-		int direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
+		int direction;
+		moves = speed;
+		while(moves>0)	//petla wykonuje przewidziana liczbe ruchow dla jednostki np: dla speed=2 petla wykona się 2 razy
+		{
+			if(moves<1){	// gdy liczba ruchow wyniesie wiecej niz 0 ale mniej niz 1 instrukcja wykona ponizszy krok.
+				if(random.nextFloat(1)<moves) {break;} //jesli predkosc jest wyrazona jako liczba niecalkowita to instrukcja if wylosuje czy ma wykonac dodatkowy ruch gdy liczba ruchow spadnie ponizej 1
+			}
+		direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
 		
-		// Poruszaj się w górę
-		if (direction == 0) {
-        		if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
-           			if (mapa.isFieldEmpty(pos_x, pos_y - 1)) { // Sprawdź, czy pole jest puste
-               				 pos_y--; // Przejdź na nową pozycję
-           	}
-				else {
-					destroy(); // Zniszcz pole, jeśli nie jest puste
-					pos_y--;
-           	}}}
-		// Poruszaj się w dół
-		else if (direction == 1) { 
-       			if (pos_y + 1 < Main.y) {
-            			if (mapa.isFieldEmpty(pos_x, pos_y + 1)) {
-              				pos_y++;
-            	} 
-				else {
-					destroy();
+			switch(direction)
+			{
+			case 0: // Poruszaj się w gore
+				if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
+				pos_y--; // Przejdź na nową pozycję
+				if (mapa.isFieldEmpty(pos_x, pos_y - 1)==false) {destroy();} // Sprawdź, czy pole jest puste i zniszcz pole, jeśli nie jest puste
+				}break;
+			case 1: // Poruszaj się w dol
+				if (pos_y + 1 < Main.getY()) {
 					pos_y++;
-            	}}}
-		// Poruszaj się w lewo
-		else if (direction == 2) {
-       			if (pos_x - 1 >= 0) {
-          			if (mapa.isFieldEmpty(pos_x - 1, pos_y)) {
-             				pos_x--;
-          	}
-				else {
-					destroy();
+					if (mapa.isFieldEmpty(pos_x, pos_y + 1)==false) {destroy();}
+				}break;
+			case 2: // Poruszaj się w lewo
+				if (pos_x - 1 >= 0) {
 					pos_x--;
-        	}}}
-		// Poruszaj się w prawo
-		else if (direction == 3) {
-       			if (pos_x + 1 < Main.x) {
-           			if (mapa.isFieldEmpty(pos_x + 1, pos_y)) {
-              				pos_x++;
-           	} 
-				else {
-					destroy();
+				if (mapa.isFieldEmpty(pos_x - 1, pos_y)==false) {destroy();}
+				}break;
+			case 3: // Poruszaj się w prawo
+				if (pos_x + 1 < Main.getX()) {
 					pos_x++;
-            	}}}	
+				if (mapa.isFieldEmpty(pos_x + 1, pos_y)==false) {destroy();}
+				}break;
+			}
+		moves--;
+		}
 	}
 	public void destroy()
 	{
