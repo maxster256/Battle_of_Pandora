@@ -54,7 +54,12 @@ public class Rider extends Unit_Strength implements Interface{
             if (fieldContent.equals("_") || fieldContent.equals("T")) {
                 continue; // Jeśli pole zawiera "_" lub "T", przejdź do kolejnej iteracji pętli
 	    }
-            colonizator.setHealth(colonizator.getHealth() - 50);
+			
+	   if (fieldContent.equals("_")) {
+                colonizator.setHealth(colonizator.getHealth() - strenght);
+            } else if (fieldContent.equals("B")) {
+                colonizator.setHealth(colonizator.getHealth() - 2*strenght);
+            }
 		}}}}
 	public Rider(int health, double speed, int pos_x, int pos_y,int index,int strength)
 	{
