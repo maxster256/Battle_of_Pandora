@@ -51,9 +51,7 @@ public class Rider extends Unit_Strength implements Interface{
      		if (Math.abs(colonizatorPosX - pos_x) <= 2 && Math.abs(colonizatorPosY - pos_y) <= 2) {
            		String fieldContent = mapa.getFieldContent(colonizatorPosX, colonizatorPosY);
             
-            if (fieldContent.equals("_") || fieldContent.equals("T")) {
-                continue; // Jeśli pole zawiera "_" lub "T", przejdź do kolejnej iteracji pętli
-	    }
+          
 			
 	   if (fieldContent.equals("_")) {
                 colonizator.setHealth(colonizator.getHealth() - strenght);
