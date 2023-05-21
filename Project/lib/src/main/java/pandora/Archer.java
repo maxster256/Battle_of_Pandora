@@ -46,8 +46,8 @@ public class Archer extends Unit_Strength implements Interface{
 	{
 		
 	}
-	public Archer(int health, double speed, int pos_x, int pos_y,int strength, int index)
+	public Archer(int health, double speed, int pos_x, int pos_y,int index,int strength)
 	{
-		super(health,speed,pos_x,pos_y,strength,index);
+		super(health,speed,pos_x,pos_y,index,strength);
 	}
 }
