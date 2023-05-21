@@ -44,8 +44,18 @@ public class Rider extends Unit_Strength implements Interface{
 	@Override
 	public void attack()
 	{
-		
-	}
+		for (Colonizator colonizator : mapa.getColonizators()) {
+       			int colonizatorPosX = colonizator.getPos_x();
+        		int colonizatorPosY = colonizator.getPos_y();
+        
+     		if (Math.abs(colonizatorPosX - pos_x) <= 2 && Math.abs(colonizatorPosY - pos_y) <= 2) {
+           		String fieldContent = mapa.getFieldContent(colonizatorPosX, colonizatorPosY);
+            
+            if (fieldContent.equals("_") || fieldContent.equals("T")) {
+                continue; // Jeśli pole zawiera "_" lub "T", przejdź do kolejnej iteracji pętli
+	    }
+            colonizator.setHealth(colonizator.getHealth() - 50);
+		}}}}
 	public Rider(int health, double speed, int pos_x, int pos_y,int index,int strength)
 	{
 		super(health,speed,pos_x,pos_y,index,strength);
