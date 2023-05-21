@@ -45,8 +45,8 @@ public class Main {
 		ArrayList<Object> Archers = new ArrayList<Object>();	//lista lucznikow
 		ArrayList<Object> Riders = new ArrayList<Object>();	//lista jezdzcow
 		
-		ArrayList<ArrayList<Object>> Navi = new ArrayList<ArrayList<Object>>();		//lista strony navi - lucznikow i jezdzcow
-		ArrayList<ArrayList<Object>> Colonizators = new ArrayList<ArrayList<Object>>();	//lista strony kolonizatorow - zolnierzy, robotow i buldozera
+		ArrayList<ArrayList<Object>> Navi = new ArrayList<ArrayList<Object>>();		//lista zagniezdzona strony navi - lucznikow i jezdzcow
+		ArrayList<ArrayList<Object>> Colonizators = new ArrayList<ArrayList<Object>>();	//lista zagniezdzona strony kolonizatorow - zolnierzy, robotow i buldozera
 		
 		Bulldozer Bulldozer = new Bulldozer(500,0.25,x-1,y-1,0);	//utworzenie buldozera
 		Bulldozers.add(Bulldozer);					//dodanie buldozera do listy
