@@ -19,25 +19,25 @@ public class Archer extends Unit_Strength implements Interface{
 			}
 		direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
 		
-			switch(direction)
-			{
-			case 0: //Poruszaj się w górę
-				if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
-				if (mapa.isFieldaTree(pos_x, pos_y - 1)==false) {pos_y--;} // Sprawdz czy pole jest drzewem. Jesli nie, przejdź na nową pozycję
-				}break;
-			case 1: // Poruszaj się w dół
-				if (pos_y + 1 < Main.getY()) {
-				if (mapa.isFieldaTree(pos_x, pos_y + 1)==false) {pos_y++;}
-				}break;
-			case 2: // Poruszaj się w lewo
-				if (pos_x - 1 >= 0) {
-				if (mapa.isFieldaTree(pos_x - 1, pos_y)==false) {pos_x--;}
-				}break;
-			case 3: // Poruszaj się w prawo
-				if (pos_x + 1 < Main.getX()) {
-				if (mapa.isFieldaTree(pos_x + 1, pos_y)==false) {pos_x++;}
-				}break;
-			}
+		switch(direction)
+		{
+		case 0: //Poruszaj się w górę
+			if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
+       			if (mapa.FieldContent(pos_x, pos_y - 1)!='T') {pos_y--;} // Sprawdz czy pole jest drzewem. Jesli nie, przejdź na nową pozycję
+			}break;
+		case 1: // Poruszaj się w dół
+			if (pos_y + 1 < Main.getY()) {
+    			if (mapa.FieldContent(pos_x, pos_y + 1)!='T') {pos_y++;}
+			}break;
+		case 2: // Poruszaj się w lewo
+			if (pos_x - 1 >= 0) {
+      			if (mapa.FieldContent(pos_x - 1, pos_y)!='T') {pos_x--;}
+			}break;
+		case 3: // Poruszaj się w prawo
+			if (pos_x + 1 < Main.getX()) {
+       			if (mapa.FieldContent(pos_x + 1, pos_y)!='T') {pos_x++;}
+			}break;
+		}
 		moves--;
 		}
 	}
