@@ -56,11 +56,10 @@ public class Map {
         }
     }
     
-    // metoda sprawdzajaca czy dane pole jest puste (rowne "_")
-    public boolean isFieldEmpty(int x, int y)
+    // metoda zwracająca wartośc pola
+    public char FieldContent(int x, int y)
     {
-    	if(map[x][y]=='_') {return true;}
-    	return false;
+    	return map[x][y];
     }
 
     // metoda zwracająca liczbę T-drzew na mapie
