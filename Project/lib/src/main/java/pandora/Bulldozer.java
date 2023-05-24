@@ -18,29 +18,29 @@ public class Bulldozer extends Unit{
 			}
 		direction = random.nextInt(4); // GGeneruj losową liczbę między 0-3
 		
-			switch(direction)
-			{
-			case 0: // Poruszaj się w gore
-				if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
-				pos_y--; // Przejdź na nową pozycję
-				if (mapa.isFieldEmpty(pos_x, pos_y - 1)==false) {destroy();} // Sprawdź, czy pole jest puste i zniszcz pole, jeśli nie jest puste
-				}break;
-			case 1: // Poruszaj się w dol
-				if (pos_y + 1 < Main.getY()) {
-					pos_y++;
-					if (mapa.isFieldEmpty(pos_x, pos_y + 1)==false) {destroy();}
-				}break;
-			case 2: // Poruszaj się w lewo
-				if (pos_x - 1 >= 0) {
-					pos_x--;
-				if (mapa.isFieldEmpty(pos_x - 1, pos_y)==false) {destroy();}
-				}break;
-			case 3: // Poruszaj się w prawo
-				if (pos_x + 1 < Main.getX()) {
-					pos_x++;
-				if (mapa.isFieldEmpty(pos_x + 1, pos_y)==false) {destroy();}
-				}break;
-			}
+		switch(direction)
+		{
+		case 0: // Poruszaj się w gore
+			if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
+    			pos_y--; // Przejdź na nową pozycję
+       			if (mapa.FieldContent(pos_x, pos_y - 1)!='_') {destroy();} // Sprawdź, czy pole jest puste i zniszcz pole, jeśli nie jest puste
+			}break;
+		case 1: // Poruszaj się w dol
+			if (pos_y + 1 < Main.getY()) {
+   				pos_y++;
+        		if (mapa.FieldContent(pos_x, pos_y + 1)!='_') {destroy();}
+        	}break;
+		case 2: // Poruszaj się w lewo
+			if (pos_x - 1 >= 0) {
+   				pos_x--;
+      			if (mapa.FieldContent(pos_x - 1, pos_y)!='_') {destroy();}
+			}break;
+		case 3: // Poruszaj się w prawo
+			if (pos_x + 1 < Main.getX()) {
+   				pos_x++;
+       			if (mapa.FieldContent(pos_x + 1, pos_y)!='_') {destroy();}
+			}break;
+		}
 		moves--;
 		}
 	}
@@ -48,8 +48,8 @@ public class Bulldozer extends Unit{
 	{
 		mapa.change_map(pos_x,pos_y); // wywolanie metody z klasy Map odpowiedzialnej za zmiane zawartosci danego pola mapy
 	}
-	public Bulldozer(int health, int speed, int pos_x, int pos_y)
+	public Bulldozer(int health, double speed, int pos_x, int pos_y, int index)
 	{
-		super(health,speed,pos_x,pos_y);
+		super(health,speed,pos_x,pos_y,index);
 	}
 }
