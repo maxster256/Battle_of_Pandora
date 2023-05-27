@@ -44,7 +44,20 @@ public class Soldier extends Unit_Strength implements Interface{
 	@Override
 	public void attack()
 	{
-		
+		for (Navi navi : mapa.getNavi()) {
+       		int naviPosX = navi.getPos_x();
+        	int naviPosY = navi.getPos_y();
+        
+     		if (Math.abs(naviPosX - pos_x) <= 1 && Math.abs(naviPosY - pos_y) <= 1) {
+           		String fieldContent = mapa.getFieldContent(naviPosX, naviPosY);
+            		
+		if (fieldContent.equals("_")) {
+			navi.setHealth(navi.getHealth() - strenght);
+		    } 
+		else if (fieldContent.equals("B")) {
+			navi.setHealth(navi.getHealth() - 2*strenght);
+		    }
+			}}}
 	}
 	public Soldier(int health, double speed, int pos_x, int pos_y,int index,int strength)
 	{
