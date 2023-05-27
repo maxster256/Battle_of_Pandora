@@ -44,7 +44,20 @@ public class Archer extends Unit_Strength implements Interface{
 	@Override
 	public void attack()
 	{
-		
+		for (Colonizator colonizator : mapa.getColonizators()) {
+       			int colonizatorPosX = colonizator.getPos_x();
+        		int colonizatorPosY = colonizator.getPos_y();
+        
+     		if (Math.abs(colonizatorPosX - pos_x) <= 2 && Math.abs(colonizatorPosY - pos_y) <= 2) {
+           		String fieldContent = mapa.getFieldContent(colonizatorPosX, colonizatorPosY);
+            
+		if (fieldContent.equals("_")) {
+			colonizator.setHealth(colonizator.getHealth() - strenght);
+		    } 
+		else if (fieldContent.equals("B")) {
+			colonizator.setHealth(colonizator.getHealth() - 2*strenght);
+		    }
+			}}}
 	}
 	public Archer(int health, double speed, int pos_x, int pos_y,int index,int strength)
 	{
