@@ -1,15 +1,14 @@
 package pandora;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-	//parametry prywatne pozyskiwane getterami na samym dole klasy Main
+	
 	private static int x,y;
 	private static int rider, archer, robot, soldier;
 	private static int density;
 	private static int iterations;
-
+	
 	public static void main(String[] args)
 	{ 
 		Scanner scan = new Scanner(System.in);
@@ -38,53 +37,50 @@ public class Main {
 		Map mapa = new Map(x,y,density);
 		mapa.generate();		//utworzenie mapy
 		mapa.display();
+		Interface[] tab = new Interface[soldier+robot+rider+archer+1];
 		
-		ArrayList<Object> Soldiers = new ArrayList<Object>();	//lista zolnierzy
-		ArrayList<Object> Robots = new ArrayList<Object>();	//lista robotow
-		ArrayList<Object> Bulldozers = new ArrayList<Object>();	//lista buldozerow - domyslne jest tylko jeden
-		ArrayList<Object> Archers = new ArrayList<Object>();	//lista lucznikow
-		ArrayList<Object> Riders = new ArrayList<Object>();	//lista jezdzcow
-		
-		ArrayList<ArrayList<Object>> Navi = new ArrayList<ArrayList<Object>>();		//lista zagniezdzona strony navi - lucznikow i jezdzcow
-		ArrayList<ArrayList<Object>> Colonizators = new ArrayList<ArrayList<Object>>();	//lista zagniezdzona strony kolonizatorow - zolnierzy, robotow i buldozera
-		
-		Bulldozer Bulldozer = new Bulldozer(500,0.25,x-1,y-1,0);	//utworzenie buldozera
-		Bulldozers.add(Bulldozer);					//dodanie buldozera do listy
-		//ponizsze pętle for tworza podana wczesniej liczbe jednostek poszczegolnych klas - podana liczbe razy tworza jednostke i dodaja ja do odpowiedniej listy
-		//parametry konstruktorow danych klas uszeregowane sa w nastepujacy sposob: (health,speed,pos_x,pos_y,index,strength)
+		//ponizsze pętle for tworza podana wczesniej liczbe jednostek poszczegolnych klas - podana liczbe razy tworza jednostke i dodaja ja do tablicy z polimorfizmu
+		//parametry konstruktorow danych klas uszeregowane sa w nastepujacy sposob: (team,health,speed,pos_x,pos_y,strength,strength_bonus)
 		for(int i=0;i<soldier;i++)	//petla for dla zolnierzy
 		{
-			Soldier Soldier = new Soldier(100,1,0,0,i+1,40);
-			Soldiers.add(Soldier);
+			tab[i] = new Soldier('C',100,1,0,0,40,0.5);
 		}
 		for(int i=0;i<robot;i++)	//petla for dla robotow
 		{
-			Robot Robot = new Robot(200,2,0,0,i+1+soldier,60);
-			Robots.add(Robot);
+			tab[soldier+i] = new Robot('C',200,2,0,0,60,0.5);
 		}
 		for(int i=0;i<rider;i++)	//petla for dla jezdzcow
 		{
-			Rider Rider = new Rider(100,2,0,0,i+1,40);
-			Riders.add(Rider);
+			tab[robot+soldier+i] = new Rider('N',100,2,0,0,40,2);
 		}
 		for(int i=0;i<archer;i++)	//petla for dla lucznikow
 		{
-			Archer Archer = new Archer(100,1,0,0,i+1+rider,40);
-			Archers.add(Archer);
+			tab[rider+robot+soldier+i] = new Archer('N',100,1,0,0,40,2);
 		}
-		
-		Navi.add(Riders);		//dodanie listy jezdzcow do listy navi
-		Navi.add(Archers);		//dodanie listy lucznikow do listy navi
-		Colonizators.add(Bulldozers);	//dodanie listy buldozera do listy kolonizatorow
-		Colonizators.add(Soldiers);	//dodanie listy zolnierzy do listy kolonizatorow
-		Colonizators.add(Robots);	//dodanie listy robotow do listy kolonizatorow
+		tab[soldier+robot+rider+archer] = new Bulldozer('C',500,0.25,x-1,y-1,500,1);	//utworzenie buldozera na ostatniej pozycji tablicy w polimorfizmie
 		
 		for(int i=0;i<iterations;i++)	//petla for do wykonania symulacji
 		{
-			//wykonanie symulacji
+			//ponizej przyklady dzialania metody atak z uzyciem obiektow oraz przykladowa petla (tylko) sprawdzajaca mozliwosc wykonania ataku bezposredniego
+			/*
+			System.out.println("Health of soldier: "+((Unit)tab[0]).health); //soldier
+			System.out.println("Health of rider: "+((Unit)tab[2]).health); //rider
+			tab[0].attack(tab[2],mapa);
+			System.out.println("Health of soldier: "+((Unit)tab[0]).health); //soldier
+			System.out.println("Health of rider: "+((Unit)tab[2]).health); //rider	
+			for(int j=0;j<tab.length;j++)
+			{
+				for(int k=0;k<tab.length;k++)
+				{
+					if(((Unit)tab[j]).team!=((Unit)tab[k]).team && Math.abs(((Unit)tab[j]).pos_x-((Unit)tab[k]).pos_x)<=1 && Math.abs(((Unit)tab[j]).pos_y-((Unit)tab[k]).pos_y)<=1)
+					{
+						tab[j].attack(tab[k],mapa);
+					}
+				}
+			}
+			*/
 		}
 	}
-	public static int getX() {return x;}	//getter dlugosci mapy
-	public static int getY() {return y;}	//getter szerokosci mapy
-
+	public static int getX() {return x;}
+	public static int getY() {return y;}
 }
