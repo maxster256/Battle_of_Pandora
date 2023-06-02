@@ -53,10 +53,21 @@ public class Unit implements Interface{
 		if(mapa.FieldContent(pos_x,pos_y)=='_') {((Unit)enemy).health-=strength;}
 		else {((Unit)enemy).health-=strength*strength_bonus;}
 	}
-	public void far_attack()
+	public void far_attack(Interface enemy, Map mapa)
 	{
-		
-	}
+		int enemyPosX = ((Unit)enemy).pos_x;
+   		int enemyPosY = ((Unit)enemy).pos_y;
+    
+   		for (int i = enemyPosX - 2; i <= enemyPosX + 2; i++) {
+       			for (int j = enemyPosY - 2; j <= enemyPosY + 2; j++) {
+           			if (i >= 0 && i < mapa.getSizeX() && j >= 0 && j < mapa.getSizeY()) {
+               				char fieldContent = mapa.FieldContent(i, j);
+                			if (fieldContent == '_') {
+                    				((Unit)enemy).health -= strength;
+                } 
+		else {
+                	((Unit)enemy).health -= strength * strength_bonus;
+                }}}}}
 	
 	public Unit(char team,int health, double speed, int pos_x, int pos_y,int strength,double strength_bonus)
 	{
