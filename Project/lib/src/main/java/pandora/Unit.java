@@ -62,7 +62,11 @@ public class Unit implements Interface{
        			for (int j = enemyPosY - 2; j <= enemyPosY + 2; j++) {
            			if (i >= 0 && i < mapa.getSizeX() && j >= 0 && j < mapa.getSizeY()) {
                				char fieldContent = mapa.FieldContent(i, j);
-                			if (fieldContent == '_') {
+					if(fieldContent == 'T'){
+						//Atak przerwany przez drzewo
+						return;
+					}
+                			else if (fieldContent == '_') {
                     				((Unit)enemy).health -= strength;
                 } 
 					else {
