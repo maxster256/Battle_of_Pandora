@@ -65,8 +65,8 @@ public class Unit implements Interface{
                 			if (fieldContent == '_') {
                     				((Unit)enemy).health -= strength;
                 } 
-		else {
-                	((Unit)enemy).health -= strength * strength_bonus;
+					else {
+                				((Unit)enemy).health -= strength * strength_bonus;
                 }}}}}
 	
 	public Unit(char team,int health, double speed, int pos_x, int pos_y,int strength,double strength_bonus)
