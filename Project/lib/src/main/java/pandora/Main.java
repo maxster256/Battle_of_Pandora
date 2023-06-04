@@ -8,7 +8,7 @@ public class Main {
 	private static int rider, archer, robot, soldier;
 	private static int density;
 	private static int iterations;
-	
+
 	public static void main(String[] args)
 	{ 
 		Scanner scan = new Scanner(System.in);
@@ -36,49 +36,65 @@ public class Main {
 	{
 		Map mapa = new Map(x,y,density);
 		mapa.generate();		//utworzenie mapy
-		mapa.display();
-		Interface[] tab = new Interface[soldier+robot+rider+archer+1];
-		
+		//mapa.display();
+		int spawn_x=x-1;		//umiejscowienie spawnu kolonizatorow w dolnym prawym rogu mapy
+		int spawn_y=y-1;		
+		Interface[] tab = new Interface[soldier+robot+rider+archer+1];	
 		//ponizsze pętle for tworza podana wczesniej liczbe jednostek poszczegolnych klas - podana liczbe razy tworza jednostke i dodaja ja do tablicy z polimorfizmu
-		//parametry konstruktorow danych klas uszeregowane sa w nastepujacy sposob: (team,health,speed,pos_x,pos_y,strength,strength_bonus)
+		//parametry konstruktorow danych klas uszeregowane sa w nastepujacy sposob: (type,team,health,speed,pos_x,pos_y,strength,strength_bonus)
+		
+		//dla kolonizatorow i navi jednostki spawnuja sie tak aby zadne jednostki nie dzielily ze soba pola
+		//dla kolonizatorow spawn zaczyna sie od prawej krawedzi mapy
+		//dla navi spawn zaczyna sie od lewej krawedzi mapy
+		//w przypadku wypelnienia ktores z krawedzi, do spawnu przydzielana jest nastepna kolumna w kierunku centrum mapy 
 		for(int i=0;i<soldier;i++)	//petla for dla zolnierzy
 		{
-			tab[i] = new Soldier('C',100,1,0,0,40,0.5);
+			if(spawn_y<0) {spawn_y=y-1; spawn_x--;}	// komentarz 49
+			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y--;}	//jesli pole jest drzewem to jednostka nie moze na nim sie pojawic (pojawi sie na pierwszym polu B lub _)
+			tab[i+1] = new Soldier(1,'C',100,1,spawn_x,spawn_y,40,0.5);
+			spawn_y--;	//przesuniecie spawnu tak aby kazda jednostka miala wlasne miejsce spawnu
 		}
 		for(int i=0;i<robot;i++)	//petla for dla robotow
 		{
-			tab[soldier+i] = new Robot('C',200,2,0,0,60,0.5);
+			if(spawn_y<0) {spawn_y=y-1; spawn_x--;} // komentarz 49
+			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y--;}
+			tab[soldier+i+1] = new Robot(2,'C',200,2,spawn_x,spawn_y,60,0.5);
+			spawn_y--;
 		}
+		spawn_x=0;			//umiejscowienie spawnu navi w gornym lewym rogu mapy
+		spawn_y=0;
 		for(int i=0;i<rider;i++)	//petla for dla jezdzcow
 		{
-			tab[robot+soldier+i] = new Rider('N',100,2,0,0,40,2);
+			if(spawn_y>=y) {spawn_y=0; spawn_x++;} // komentarz 49
+			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y++;}
+			tab[robot+soldier+i+1] = new Rider(3,'N',100,2,spawn_x,spawn_y,40,2);
+			spawn_y++;
 		}
 		for(int i=0;i<archer;i++)	//petla for dla lucznikow
 		{
-			tab[rider+robot+soldier+i] = new Archer('N',100,1,0,0,40,2);
+			if(spawn_y>=y) {spawn_y=0; spawn_x++;} // komentarz 49
+			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y++;}
+			tab[rider+robot+soldier+i+1] = new Archer(4,'N',100,1,spawn_x,spawn_y,40,2);
+			spawn_y++;
 		}
-		tab[soldier+robot+rider+archer] = new Bulldozer('C',500,0.25,x-1,y-1,500,1);	//utworzenie buldozera na ostatniej pozycji tablicy w polimorfizmie
+		Bulldozer bull = new Bulldozer(0,'C',500,0.25,x/2-1,y/2-1,500,1);
+		tab[0] = bull;	//utworzenie buldozera na ostatniej pozycji tablicy w polimorfizmie
+		mapa.images();	//zaladowanie plikow .png
+		mapa.Frame(tab);	//wyswietlenie mapy przed rozpoczeciem symulacji
+		try {Thread.sleep(10000);}			//odczekanie 10 sekund aby uzytkownik mogl otworzyc mape na czas
+		catch (InterruptedException e) {e.printStackTrace();}
 		
 		for(int i=0;i<iterations;i++)	//petla for do wykonania symulacji
 		{
-			//ponizej przyklady dzialania metody atak z uzyciem obiektow oraz przykladowa petla (tylko) sprawdzajaca mozliwosc wykonania ataku bezposredniego
-			/*
-			System.out.println("Health of soldier: "+((Unit)tab[0]).health); //soldier
-			System.out.println("Health of rider: "+((Unit)tab[2]).health); //rider
-			tab[0].attack(tab[2],mapa);
-			System.out.println("Health of soldier: "+((Unit)tab[0]).health); //soldier
-			System.out.println("Health of rider: "+((Unit)tab[2]).health); //rider	
-			for(int j=0;j<tab.length;j++)
+			mapa.Frame(tab);					//wizualizacja mapy podczas danej tury
+			try {Thread.sleep(500);}		//odczekanie 0.5 sekundy w celu wyswietlenia symulacji
+			catch (InterruptedException e) {e.printStackTrace();}
+			//powyzsze kroki sa do pominiecia jesli sama wizualizacja symulacji nie jest brana pod uwage (np przy zbieraniu danych symulacji)
+			bull.moveBulldozer(mapa);					//wykonanie metody moveBulldozer dla buldozera
+			for(int index=1;index<tab.length;index++)
 			{
-				for(int k=0;k<tab.length;k++)
-				{
-					if(((Unit)tab[j]).team!=((Unit)tab[k]).team && Math.abs(((Unit)tab[j]).pos_x-((Unit)tab[k]).pos_x)<=1 && Math.abs(((Unit)tab[j]).pos_y-((Unit)tab[k]).pos_y)<=1)
-					{
-						tab[j].attack(tab[k],mapa);
-					}
-				}
+				tab[index].move(mapa);					//wykonania metody move dla pozostalych jednostek
 			}
-			*/
 		}
 	}
 	public static int getX() {return x;}
