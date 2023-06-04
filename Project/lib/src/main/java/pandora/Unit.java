@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class Unit implements Interface{
 	
+	int type;
 	char team;
 	int health;
 	double speed;
@@ -53,19 +54,20 @@ public class Unit implements Interface{
 		if(mapa.FieldContent(pos_x,pos_y)=='_') {((Unit)enemy).health-=strength;}
 		else {((Unit)enemy).health-=strength*strength_bonus;}
 	}
-	public void far_attack()
+	public void far_attack(Interface enemy, Map mapa)
 	{
 		
-	}
+   	}
 	
-	public Unit(char team,int health, double speed, int pos_x, int pos_y,int strength,double strength_bonus)
+	public Unit(int type,char team,int health, double speed, int pos_x, int pos_y,int strength,double strength_bonus)
 	{
-		this.team=team;
-		this.health=health;
-		this.speed=speed;
-		this.pos_x=pos_x;
-		this.pos_y=pos_y;
-		this.strength=strength;
-		this.strength_bonus=strength_bonus;
+		this.type=type;						//pole type do okreslenia jakim typem jednostki jest dana jednostka
+		this.team=team;						//pole team do okreslenia w jakiej druzynie znajduje sie jednostka
+		this.health=health;					//pole health - poziom zycia jednostki
+		this.speed=speed;					//pole speed - o ile srednio pol moze sie poruszyc w ciagu 1 tury
+		this.pos_x=pos_x;					//pole pos_x - pozycja pozioma jednostki
+		this.pos_y=pos_y;					//pole pos_y - pozycja pionowa jednostki
+		this.strength=strength;				//pole strength - ile moze odebrac zycia przeciwnikowi
+		this.strength_bonus=strength_bonus;	//pole strength_bonus - mnoznik do strength w przypadku gdy jednostka sie znajdzie w krzaku
 	}
 }
