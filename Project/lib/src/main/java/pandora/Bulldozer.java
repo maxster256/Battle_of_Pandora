@@ -20,22 +20,22 @@ public class Bulldozer extends Unit{
 		case 0: // Poruszaj się w gore
 			if (pos_y - 1 >= 0) { // Sprawdź, czy nowa pozycja mieści się w granicach siatki
     			pos_y--; // Przejdź na nową pozycję
-       			if (mapa.FieldContent(pos_x, pos_y - 1)!='_') {destroy(mapa);} // Sprawdź, czy pole jest puste i zniszcz pole, jeśli nie jest puste
+       			if (mapa.FieldContent(pos_x, pos_y)!='_') {destroy(mapa);} // Sprawdź, czy pole jest puste i zniszcz pole, jeśli nie jest puste
 			}break;
 		case 1: // Poruszaj się w dol
 			if (pos_y + 1 < Main.getY()) {
    				pos_y++;
-        		if (mapa.FieldContent(pos_x, pos_y + 1)!='_') {destroy(mapa);}
+        		if (mapa.FieldContent(pos_x, pos_y)!='_') {destroy(mapa);}
         	}break;
 		case 2: // Poruszaj się w lewo
 			if (pos_x - 1 >= 0) {
    				pos_x--;
-      			if (mapa.FieldContent(pos_x - 1, pos_y)!='_') {destroy(mapa);}
+      			if (mapa.FieldContent(pos_x, pos_y)!='_') {destroy(mapa);}
 			}break;
 		case 3: // Poruszaj się w prawo
 			if (pos_x + 1 < Main.getX()) {
    				pos_x++;
-       			if (mapa.FieldContent(pos_x + 1, pos_y)!='_') {destroy(mapa);}
+       			if (mapa.FieldContent(pos_x, pos_y)!='_') {destroy(mapa);}
 			}break;
 		}
 		moves--;
@@ -45,8 +45,8 @@ public class Bulldozer extends Unit{
 	{
 		mapa.change_map(pos_x,pos_y); // wywolanie metody z klasy Map odpowiedzialnej za zmiane zawartosci danego pola mapy
 	}
-	public Bulldozer(char team,int health, double speed, int pos_x, int pos_y, int strength,double strength_bonus)
+	public Bulldozer(int type,char team,int health, double speed, int pos_x, int pos_y, int strength,double strength_bonus)
 	{
-		super(team,health,speed,pos_x,pos_y,strength,strength_bonus);
+		super(type,team,health,speed,pos_x,pos_y,strength,strength_bonus);
 	}
 }
