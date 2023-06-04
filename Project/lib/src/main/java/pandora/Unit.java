@@ -51,12 +51,12 @@ public class Unit implements Interface{
 	@Override
 	public void attack(Interface enemy, Map mapa)
 	{
-		if(mapa.FieldContent(pos_x,pos_y)=='_') {((Unit)enemy).health-=strength;}
-		else {((Unit)enemy).health-=strength*strength_bonus;}
+		((Unit)enemy).health-=strength;
 	}
 	public void far_attack(Interface enemy, Map mapa)
 	{
-		
+		if(mapa.FieldContent(pos_x,pos_y)=='_') {((Unit)enemy).health-=strength;}
+		else {((Unit)enemy).health-=strength*strength_bonus;}
    	}
 	
 	public Unit(int type,char team,int health, double speed, int pos_x, int pos_y,int strength,double strength_bonus)
