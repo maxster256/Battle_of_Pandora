@@ -59,8 +59,14 @@ public class Main {
 		}
 		tab[soldier+robot+rider+archer] = new Bulldozer('C',500,0.25,x-1,y-1,500,1);	//utworzenie buldozera na ostatniej pozycji tablicy w polimorfizmie
 		
-		for(int i=0;i<iterations;i++)	//petla for do wykonania symulacji
+		for(Interface i: tab)	//petla for do wykonania symulacji
 		{
+			//Czy mozliwy atak
+			//ewentualny atak
+
+			for(Interface j: tab){
+				if(i!=j && j.getTeam()!=i.getTeam()) i.attack(j,mapa);
+			
 			//ponizej przyklady dzialania metody atak z uzyciem obiektow oraz przykladowa petla (tylko) sprawdzajaca mozliwosc wykonania ataku bezposredniego
 			/*
 			System.out.println("Health of soldier: "+((Unit)tab[0]).health); //soldier
