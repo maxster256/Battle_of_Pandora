@@ -3,8 +3,8 @@ package pandora;
 import java.util.Random;
 
 public class Map {
-	
-	private int width;
+
+    private int width;
     private int height;
     private int density; // zagęszczenie roślin w procentach
     private int Trees_numb;
@@ -74,4 +74,6 @@ public class Map {
     {
     	map[x][y] = '_'; // Zamień zawartość pola na '_'
     }
+    public int getSizeX(){return width;}
+    public int getSizeY(){return height;}
 }
