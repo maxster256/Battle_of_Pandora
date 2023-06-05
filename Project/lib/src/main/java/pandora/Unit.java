@@ -12,6 +12,8 @@ public class Unit implements Interface{
 	double moves;
 	int strength;
 	double strength_bonus;
+	boolean lightAttackAvailable;
+	boolean farAttackAvailable;
 	
 	@Override
 	public void move(Map mapa)
@@ -50,16 +52,22 @@ public class Unit implements Interface{
 	@Override
 	public void attack(Interface enemy, Map mapa)
 	{
+		if(lightAttackAvailable) shortAttack(enemy,mapa);
+		else if (farAttackAvailable) far_attack(enemy,mapa);
+	
+	}
+	private void shortAttack(Interface enemy, Map mapa)
+	{
 		if(mapa.FieldContent(pos_x,pos_y)=='_') {((Unit)enemy).health-=strength;}
 		else {((Unit)enemy).health-=strength*strength_bonus;}
 	}
-	public void far_attack(Interface enemy, Map mapa)
+	private void far_attack(Interface enemy, Map mapa)
 	{
 		int enemyPosX = ((Unit)enemy).pos_x;
    		int enemyPosY = ((Unit)enemy).pos_y;
     
-   		for (int i = enemyPosX - 2; i <= enemyPosX + 2; i++) {
-       			for (int j = enemyPosY - 2; j <= enemyPosY + 2; j++) {
+   		for (int i = enemyPosX - 3; i <= enemyPosX + 3; i++) {
+       			for (int j = enemyPosY - 3; j <= enemyPosY + 3; j++) {
            			if (i >= 0 && i < mapa.getSizeX() && j >= 0 && j < mapa.getSizeY()) {
                				char fieldContent = mapa.FieldContent(i, j);
 					if(fieldContent == 'T'){
@@ -83,4 +91,5 @@ public class Unit implements Interface{
 		this.strength=strength;
 		this.strength_bonus=strength_bonus;
 	}
+	public char getTeam(){return team;}
 }
