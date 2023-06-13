@@ -11,7 +11,9 @@ import javax.swing.JPanel;
 
 public class Map {
 	
-    private int width;
+    Main Main = new Main();
+	
+	private int width;
     private int height;
     private int density; // zagęszczenie roślin w procentach
     private int Trees_numb;
@@ -19,14 +21,14 @@ public class Map {
     private char[][] map;
     private int w=1800;				//stale w i z uzyte w celu automatycznego dostosowania +- mapy do wymiarow ekranu (1920x1080)
     private int z=900;
-    private int p_w=w/Main.getX(); //szerokosc pojedynczego piksela na mapie
-    private int p_h=z/Main.getY(); //wysokosc pojedynczego piksela na mapie
+    private int p_w; //szerokosc pojedynczego piksela na mapie
+    private int p_h; //wysokosc pojedynczego piksela na mapie
     
     private Image []image = new Image[7];	//tablica typu Image do przechowywania plikow .png
     private JFrame frame = new JFrame();
     private JPanel panel;
     Color color;
-	
+    	
     public Map()
     {
     	
@@ -38,6 +40,9 @@ public class Map {
         this.map = new char[height][width];
         this.Trees_numb = 0;
         this.Bushes_numb = 0;
+        
+        p_w=w/width;
+        p_h=z/height;
     }
 	// metoda generująca mapę
     public void generate() {
@@ -103,8 +108,8 @@ public class Map {
             	g.fillRect(col*p_w,row*p_h,p_w,p_h);	//wypelnienie danego pola mapy kolorem	
             	switch(map[row][col])
             	{
-            	case 'T': g.drawImage(image[2],col*w/Main.getX(),row*p_h,p_w,p_h,null); break; //wyswietlenie tree.png jesli pole jest drzewem
-            	case 'B': g.drawImage(image[1],col*w/Main.getX(),row*p_h,p_w,p_h,null); break; //wyswietlenie bush.png jesli pole jest krzakiem
+            	case 'T': g.drawImage(image[2],col*p_w,row*p_h,p_w,p_h,null); break; //wyswietlenie tree.png jesli pole jest drzewem
+            	case 'B': g.drawImage(image[1],col*p_w,row*p_h,p_w,p_h,null); break; //wyswietlenie bush.png jesli pole jest krzakiem
             	default: break;
             	}
             }
@@ -144,14 +149,14 @@ public class Map {
     }
 
     // metoda zwracająca liczbę T-drzew na mapie
-    public int getTrees_numb() {
-        return Trees_numb;
-    }
-
+    public int getTrees_numb() 		{return Trees_numb;}
     // metoda zwracająca liczbę B-krzaków na mapie
-    public int getBushes_numb() {
-        return Bushes_numb;
-    }
+    public int getBushes_numb()		{return Bushes_numb;}
+    // metoda zwracająca dlugosc mapy
+    public int getX() 				{return width;}
+    // metoda zwracająca szerokosc mapy
+	public int getY() 				{return height;}
+	// metoda zamieniajaca zawartosc danego pola mapy
     public void change_map(int x, int y)
     {
     	switch(map[y][x])
