@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.util.ArrayList;
 
 public class Main {
 	
@@ -18,6 +18,10 @@ public class Main {
 	private static int repeats;
 	private static int show_visualization;
 	private static int use_file;
+	private static int lines_num=50;
+	private static int navi_wins=0, col_wins=0, draws=0;
+	private static int research_type, parameter;
+	static boolean attack_flag, dead_unit_flag; 
 
 	public static void main(String[] args) throws IOException
 	{ 
@@ -25,8 +29,8 @@ public class Main {
 		File file = new File("sample.txt");										//plik do odczytu gotowych parametrow
 		PrintWriter out = new PrintWriter("simulation.txt");					//plik do zapisu danych symulacji
 		System.out.println("Odczytac parametry wejsciowe z pliku? (1 -> tak):");
-		//use_file=scan.nextInt();	//przypisanie wartosci za pomoca Scannera
-		use_file=1;					//przypisanie wartosci w celu zadzialania taska run
+		use_file=scan.nextInt();	//przypisanie wartosci za pomoca Scannera
+		//use_file=1;					//przypisanie wartosci w celu zadzialania taska run
 		if(use_file==1) {
 			try {										//odczytanie zawartosci pliku sample.txt o ile istnieje
 				FileReader reader = new FileReader(file);
@@ -38,7 +42,7 @@ public class Main {
 			    	T[i]=Integer.parseInt(sample); i++;	//zamiana sample z typu String na int i przypisanie do tablicy
 			    }
 			    x=T[0]; y=T[1]; rider=T[2]; archer=T[3]; robot=T[4]; soldier=T[5]; iterations=T[6]; density=T[7]; show_visualization=T[8];
-			    Main.create_teams_and_map(x,y,rider,archer,robot,soldier,iterations,density,show_visualization,out);
+			    create_teams_and_map(x,y,rider,archer,robot,soldier,iterations,density,show_visualization,out);
 			    in.close();
 			} catch (IOException e) {
 				System.out.println("Błąd odczytu pliku!");
@@ -63,14 +67,51 @@ public class Main {
 		iterations=scan.nextInt();
 		System.out.println("Przedstawic wizualizacje symulacji? (1 -> tak):");
 		show_visualization=scan.nextInt();
+		System.out.println("Podaj typ badania: (brak badan -> 0, wplyw danego parametru na wynik symulacji -> 1, srednia liczebnosc druzyn w trakcie trwania symulacji ->2)");
+		research_type=scan.nextInt();
 		System.out.println("Podaj liczbe powtorzen symulacji (dla wlaczonej wizualizacji zalecane jest 1):");
 		repeats=scan.nextInt();
-									//przekazanie niezbednych parametrow do wykonania symulacji
-		for(int i=0;i<repeats;i++)	{Main.create_teams_and_map(x,y,rider,archer,robot,soldier,iterations,density,show_visualization,out);}
 		
+		//out.println("density;navi_wins;col_wins;draws");
+		//out.println("iteration;navi count;colonizators count;trees;bushes");//pierwszy wiersz pliku z danymi zebranymi z symulacji
+		if(research_type==1)	//wykonanie symulacji dla typu 1 badania
+		{
+			System.out.println("Podaj parametr\nzageszczenie lasu -> 1\nliczba lucznikow -> 2\nliczba jezdzcow -> 3\nliczba robotow -> 4\nliczba zolnierzy -> 5");
+			parameter=scan.nextInt();
+			out.println(parameter+";navi_wins;col_wins;draws");
+			for(int j=0;j<101;j+=2)
+			{
+				switch (parameter)
+				{
+				case 1: density=j; break;
+				case 2: archer=j; break;
+				case 3: rider=j; break;
+				case 4: robot=j; break;
+				case 5: soldier=j; break;
+				}					//przekazanie niezbednych parametrow do wykonania symulacji
+			for(int i=0;i<repeats;i++) {create_teams_and_map(x,y,rider,archer,robot,soldier,iterations,density,show_visualization,out);}
+			out.println(j+";"+navi_wins+";"+col_wins+";"+draws);
+			navi_wins=0; col_wins=0; draws=0;
+			System.out.println("Done "+j+" %");
+			}
+		}
+		else if(research_type==2)	//wykonanie symulacji dla typu 2 badan
+		{
+			out.println("iteration;navi count;colonizators count;trees;bushes;all map squares");//pierwszy wiersz pliku z danymi zebranymi z symulacji
+			for(int i=0;i<repeats;i++) {create_teams_and_map(x,y,rider,archer,robot,soldier,iterations,density,show_visualization,out);}
+		}
+		else {create_teams_and_map(x,y,rider,archer,robot,soldier,iterations,density,show_visualization,out);}//wykonanie wymulacji bez badan
 		}
 		out.close();
+		if(research_type==2)
+		{
+		File file1 = new File("simulation.txt");
+		PrintWriter outA = new PrintWriter("average.txt");	//plik w ktorym zamieszczone beda srednie z wykonanych symulacji
+		average(file1,outA);	//wywolanie metody do obliczenia srednich
+		outA.close();
+		}
 		scan.close();
+		System.out.println("Symulacja ukonczona.");
 	}
 	
 	public static void create_teams_and_map(int x, int y, int rider, int archer, int robot, int soldier, int iterations, int density,int show_visualization,PrintWriter out) throws FileNotFoundException //metoda z uwzglednieniem parametrow wejsciowych np ze skryptow
@@ -94,14 +135,14 @@ public class Main {
 		{
 			if(spawn_y<0) {spawn_y=y-1; spawn_x--;}	// komentarz 92
 			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y--; if(spawn_y<0) {spawn_y=y-1; spawn_x--;}}	//jesli pole jest drzewem to jednostka nie moze na nim sie pojawic (pojawi sie na pierwszym dostepnym polu 'B' lub '_')
-			col[i+1] = new Soldier(1,100,1,spawn_x,spawn_y,40,0.5,0.2,true);
+			col[i+1] = new Soldier(1,100,1,spawn_x,spawn_y,40,0.5,0.2,true,3);
 			spawn_y--;	//przesuniecie spawnu tak aby kazda jednostka miala wlasne miejsce spawnu
 		}
 		for(int i=0;i<robot;i++)	//petla for dla robotow
 		{
 			if(spawn_y<0) {spawn_y=y-1; spawn_x--;} // komentarz 92
 			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y--; if(spawn_y<0) {spawn_y=y-1; spawn_x--;}}
-			col[soldier+i+1] = new Robot(2,200,2,spawn_x,spawn_y,60,0.6,0.5,true);
+			col[soldier+i+1] = new Robot(2,200,2,spawn_x,spawn_y,60,0.6,0.5,true,3);
 			spawn_y--;
 		}
 		spawn_x=0;			//umiejscowienie spawnu navi w gornym lewym rogu mapy
@@ -110,17 +151,17 @@ public class Main {
 		{
 			if(spawn_y>=y) {spawn_y=0; spawn_x++;} // komentarz 92
 			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y++; if(spawn_y>=y) {spawn_y=0; spawn_x++;}}
-			navi[i] = new Rider(3,100,2,spawn_x,spawn_y,60,2,0.3,false);
+			navi[i] = new Rider(3,100,2,spawn_x,spawn_y,60,2,0.3,false,0);
 			spawn_y++;
 		}
 		for(int i=0;i<archer;i++)	//petla for dla lucznikow
 		{
 			if(spawn_y>=y) {spawn_y=0; spawn_x++;} // komentarz 92
 			while(mapa.FieldContent(spawn_x,spawn_y)=='T'){spawn_y++; if(spawn_y>=y) {spawn_y=0; spawn_x++;}}
-			navi[rider+i] = new Archer(4,100,1,spawn_x,spawn_y,40,1.7,0.25,true);
+			navi[rider+i] = new Archer(4,100,1,spawn_x,spawn_y,40,1.7,0.25,true,5);
 			spawn_y++;
 		}
-		Bulldozer bulldozer = new Bulldozer(0,2000,0.25,x/2-1,y/2-1,1000,1,0.85,false);
+		Bulldozer bulldozer = new Bulldozer(0,2,0.25,x/2,y/2,1000,1,0.85,false,0);
 		col[0] = bulldozer;	//(123-124)utworzenie buldozera i dodanie go do tablicy kolonizatorow na pierwsza pozycje
 		
 		if(show_visualization==1){
@@ -128,38 +169,33 @@ public class Main {
 		mapa.Frame(navi,col); //wyswietlenie mapy przed rozpoczeciem symulacji
 		}	
 		
-		switch(Main.simulation(mapa,navi,col,show_visualization,out))	//wywolanie symulacji
+		switch(simulation(mapa,navi,col,show_visualization,out))	//wywolanie symulacji
 		{
-			case 0: System.out.println("Symulacja zakonczyla sie bez rozstrzygniecia"); break;
-			case 1: System.out.println("Symulacja zakonczyla sie smiercia Navi"); break;
-			case 2: System.out.println("Symulacja zakonczyla sie smiercia kolonizatorow"); break; 
+			case 0: draws++; if(research_type==0) {System.out.println("Symulacji zakonczyla sie bez rozstrzygniecia");} break;
+			case 1: col_wins++; if(research_type==0) {System.out.println("Symulacji zakonczyla sie zwyciestwem kolonizatorow");} break;
+			case 2: navi_wins++; if(research_type==0) {System.out.println("Symulacji zakonczyla sie zwyciestwem navi");}break;
+			default: break;
 		}
 		if(show_visualization==1) {mapa.Frame(navi,col);} //wyswietlenie zawartosci mapy po zakonczeniu symulacji
 	}
 	
 	public static int simulation(Map mapa, Interface[] navi, Interface[] col,int show_visualization,PrintWriter out) throws FileNotFoundException
 	{
-		out.println("iteration;navi count;colonizators count;trees;bushes;all map squares");//pierwszy wiersz pliku z danymi zebranymi z symulacji
-		
 		int navi_counter=navi.length;			//zapisanie liczby powstalych jednostek navi
 		int colonizators_counter=col.length;	//zapisanie liczby powstalych jednostek kolonizatorow
 		
 		if(show_visualization==1) {
-		try {Thread.sleep(3000);}			//odczekanie 3 sekund aby uzytkownik mogl otworzyc mape na czas
+		try {Thread.sleep(2000);}			//odczekanie 3 sekund aby uzytkownik mogl otworzyc mape na czas
 		catch (InterruptedException e) {e.printStackTrace();}
 		}
 		
 		Bulldozer bulldozer = (Bulldozer)col[0];
-		boolean attack_flag=false;	//flaga informujaca czy jednostka wykonala juz atak. Jesli tak to nie wykona ruchu w danej iteracji
 		
-		int Xn,Yn;		//lokalizacja danej jednostki navi
-		int Xc,Yc;		//lokazlizacja danej jednostki kolonizatorow
-		
-		for(int i=0;i<iterations;i++)	//petla for do wykonania symulacji
+		for(int i=0;i<=iterations;i++)	//petla for do wykonania symulacji
 		{
 			if(show_visualization==1) {
 			mapa.Frame(navi,col);					//wizualizacja mapy podczas danej tury
-			try {Thread.sleep(500);}				//odczekanie 0.5 sekundy w celu wyswietlenia pojedynczej iteracji symulacji
+			try {Thread.sleep(10);}				//odczekanie 0.5 sekundy w celu wyswietlenia pojedynczej iteracji symulacji
 			catch (InterruptedException e) {e.printStackTrace();}
 			}
 			
@@ -168,47 +204,87 @@ public class Main {
 			{
 				if(((Unit)NAVI).health>0) {	//uniemozliwienie wykonania czegokolwiek jesli jednostka jest martwa
 				attack_flag=false;
-				Xn = ((Unit)NAVI).pos_x;
-				Yn = ((Unit)NAVI).pos_y;
-				if(bulldozer.pos_x==Xn && bulldozer.pos_y==Yn && bulldozer.health>0) {bulldozer.attack(NAVI,mapa); navi_counter--;}	//jesli buldozer najechal na dana jednostke Navi to ja zaatakuje (zabije)
-				else {
-				for(Interface COL : col)	//petla foreach do znalezienia przeciwnika do zaatakowania
+				dead_unit_flag=false;
+				if(bulldozer.pos_x==((Unit)NAVI).pos_x && bulldozer.pos_y==((Unit)NAVI).pos_y && bulldozer.health>0) {bulldozer.attack(NAVI,mapa); navi_counter--;}	//jesli buldozer najechal na dana jednostke Navi to ja zaatakuje (zabije)
+				else
 				{
-					if(((Unit)COL).health>0) { //uniemozliwienie zaatakowania jednostki juz martwej
-						Xc=((Unit)COL).pos_x;
-						Yc=((Unit)COL).pos_y;
-						if(Math.abs(Xc-Xn)+Math.abs(Yc-Yn)<=1) {NAVI.attack(COL,mapa); attack_flag=true;}	//wykonanie ataku jesli wroga jednostka jest w bezposrednim sasiedztwie (do 1 kratki odleglosci)
-						else if(Math.abs(Xc-Xn)+Math.abs(Yc-Yn)<=5 && ((Unit)NAVI).can_far_attack) {NAVI.far_attack(COL,mapa); attack_flag=true;} //wykonanie ataku jesli wroga jednostka jest w odleglosci do 5 kratek
-						if(((Unit)COL).health<=0) {colonizators_counter--;}
-					break;} //jesli atak zostal wykonany to zakonczyc szukanie przeciwnika
-				}
-				if(attack_flag==false) {NAVI.move(mapa);}}} //wykonanie metody move dla pozostalych jednostek (pod warunkiem ze nie wykonaly ataku)						
+					NAVI.find_enemy(col,mapa);
+					if(dead_unit_flag) {colonizators_counter--;}
+					if(attack_flag==false) {NAVI.move(mapa);} //wykonanie metody move dla pozostalych jednostek (pod warunkiem ze nie wykonaly ataku)
+				}} 						
 			}
 			for(Interface COL : col)	//petla foreach dla kolonizatorow
 			{
 				if(((Unit)COL).health>0 && ((Unit)COL).type!=0) { //uniemozliwienie wykonania czegokolwiek jesli jednostka jest martwa lub jest buldozerem (we wlasny sposob wykonuje mozliwe ruchy)
 				attack_flag=false;
-				Xc=((Unit)COL).pos_x;
-				Yc=((Unit)COL).pos_y;
-				for(Interface NAVI : navi) //petla foreach do znalezienia przeciwnika do zaatakowania
-				{
-					if(((Unit)NAVI).health>0) {	//uniemozliwienie zaatakowania jednostki juz martwej
-						Xn=((Unit)NAVI).pos_x;
-						Yn=((Unit)NAVI).pos_y;
-						if(Math.abs(Xc-Xn)+Math.abs(Yc-Yn)<=1) {COL.attack(NAVI,mapa); attack_flag=true;} //wykonanie ataku jesli wroga jednostka jest w bezposrednim sasiedztwie (do 1 kratki odleglosci)
-						else if(Math.abs(Xc-Xn)+Math.abs(Yc-Yn)<=3) {COL.far_attack(NAVI,mapa); attack_flag=true;} //wykonanie ataku jesli wroga jednostka jest w odleglosci do 3 kratek
-						if(((Unit)NAVI).health<=0) {navi_counter--;}
-					break;} //jesli atak zostal wykonany to zakonczyc szukanie przeciwnika
+				dead_unit_flag=false;
+					COL.find_enemy(navi,mapa);
+					if(dead_unit_flag) {navi_counter--;}
+					if(attack_flag==false) {COL.move(mapa);} //wykonanie metody move dla pozostalych jednostek (pod warunkiem ze nie wykonaly ataku)
 				}
-				if(attack_flag==false) {COL.move(mapa);}} //wykonanie metody move dla pozostalych jednostek (pod warunkiem ze nie wykonaly ataku)
 			}
-			if(i%500==0) {out.println(i+";"+navi_counter+";"+colonizators_counter+";"+mapa.getTrees_numb()+";"+mapa.getBushes_numb());}
+			if(i%(iterations/lines_num)==0 && research_type==2) {out.println(i+";"+navi_counter+";"+colonizators_counter+";"+mapa.getTrees_numb()+";"+mapa.getBushes_numb());}
 			//zapisanie pozadanych danych
+			if(navi_counter==0 && research_type!=2) {return 1;}
+			if(colonizators_counter==0 && research_type!=2) {return 2;}
 		}
 		if(navi_counter==0) {return 1;}
 		if(colonizators_counter==0) {return 2;}
 		return 0;
 	}
-	public static int getX() {return x;}
-	public static int getY() {return y;}
+	//metody average i average_calc do obliczenia sredniej z wykonanych symulacji (tylko dla typu 2 badan
+	public static double average_calc(ArrayList<ArrayList<Double>> T, int I, int J)
+	{
+		double temp=0;
+		for(int k=0;k<T.size();k+=(lines_num+1))
+		{
+			temp+=T.get(I+k).get(J);	//sumowanie danego parametru z danej iteracji ze wszystkich powtorzen symulacji
+		}
+		return temp/repeats;	//zwrocenie wartosci sredniej
+	}
+	public static void average(File file1, PrintWriter outA)
+	{
+		outA.println("A-iteration;A-navi count;A-colonizators count;A-trees;A-bushes");
+		try {										
+			FileReader reader = new FileReader(file1);
+			BufferedReader in = new BufferedReader(reader);
+		    String line;
+		    ArrayList<Double> num;								//lista sluzaca do przechowania pojedynczej linii z pliku simulation.txt
+		    ArrayList<ArrayList<Double>> T= new ArrayList<>();	//lista przechowania calej zawartosci simulation.txt
+		    ArrayList<Double> sub_final;						//lista bedaca pojedyncza linia do pliku average.txt
+		    ArrayList<ArrayList<Double>> final_Array = new ArrayList<>();	//lista z cala zawartoscia do pliku average.txt
+		    line=in.readLine();					//odczyt linii tytulowej
+		    while((line=in.readLine())!=null)	//odczyt pozostaych linii
+		    {
+		    	num = new ArrayList<>();
+		    	String[] numbers = line.split(";");	//wyodrebnienie wszystkich liczb z pojedynczej linii
+		    	for(int j=0;j<numbers.length;j++)
+		    	{
+		    		num.add(Double.parseDouble(numbers[j]));	//dodanie liczb do listy num
+		    	}
+		    	T.add(num);		//dodanie list num do listy T
+		    }
+		    for(int i=0;i<(lines_num+1);i++)	//petla for do zapelnienia listy final_array
+	    	{
+	    		sub_final = new ArrayList<>();
+	    		for(int j=0;j<T.get(i).size();j++)
+	    		{
+	    			sub_final.add(average_calc(T,i,j));	//dodanie usrednionych wartosci do listy sub_final
+	    		}
+	    		final_Array.add(sub_final);	//dodanie list sub_final do final_array
+	    	}
+		    for(int i=0;i<final_Array.size();i++) //petla for do przepisania zawartosci listy final_array do pliku average.txt
+		    {
+		    	for(int j=0;j<final_Array.get(0).size();j++)
+		    	{
+		    		outA.print(String.format("%.3f;",final_Array.get(i).get(j)));
+		    	}
+		    	outA.println();
+		    }
+		    in.close();
+		    
+		} catch (IOException e) {
+			System.out.println("Błąd odczytu pliku!");
+		} 
+	}
 }
